@@ -1,0 +1,12 @@
+---
+- name: install initial package on ftp clients boxes
+  hosts: ftp-client 
+  remote_user: ansible
+  become: true
+  become_method: sudo
+  tasks:
+  - name: install ftp initial package
+    yum:
+      name:  ['ftp']
+      state: latest
+

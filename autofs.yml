@@ -1,0 +1,47 @@
+---
+- name: AutoFs
+  hosts: ftp
+  remote_user: ansible
+  become: yes
+  tasks:
+    - name: Install Packages
+      yum:
+        name:
+          - autofs
+          - nfs-utils
+        state: installed
+
+    - name: Start Service
+      service:
+        name: autofs
+        state: started
+        enabled: yes
+
+    - name: showmount
+      shell: showmount -e 192.168.38.17
+          
+    - name: mkdir
+      file:
+        state: directory
+        path: /home/guests
+        mode: '0755'
+        owner: ansible
+        group: ansible
+
+    - name: auto.master
+      lineinfile:
+        path: /etc/auto.master
+        line: "/home/guests   /etc/auto.users   --timeout 60"
+        state: present
+  
+    - name: auto.users
+      lineinfile:
+        path: /etc/auto.users
+        create: yes
+        state: present
+        line: "*   -rw,sync 192.168.38.17:/rhome/&"
+
+    - name: Restart Service
+      service:
+        name: autofs
+        state: restarted

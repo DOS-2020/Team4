@@ -1,0 +1,17 @@
+---
+
+- name: configure ldap server
+  remote_user: ansible
+  become: yes
+  hosts: mail2 
+  gather_facts: true
+  tasks:
+    - name: Install ldap client packages
+      yum: 
+        pkg:
+          - openldap-clients
+          - nss-pam-ldapd  
+          - authconfig
+    - name: Setup ldap host
+      command: authconfig --enableldap --enableldapauth --enablemkhomedir --ldapserver=prdx-ldap401.ziyotek4.local --ldapbasedn="dc=ziyotek4,dc=local" --update
+    

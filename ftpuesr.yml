@@ -1,0 +1,16 @@
+---
+
+  - name: FTP server Setup
+    become: yes
+    hosts: ftp
+    vars:
+      user_pass:  $1$gxbxn6/7$DETrCHPa1bqGcUROftEaC1
+
+    tasks:
+
+      - name: Create local user to test ftp server
+        user:
+          name: ftpuser
+          shell: /bin/bash
+          password: "{{ user_pass }}"
+
